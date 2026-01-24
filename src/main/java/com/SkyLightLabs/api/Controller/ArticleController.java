@@ -69,10 +69,8 @@ public class ArticleController {
                 else return new ResponseEntity<>(article,HttpStatus.OK);
             }
         } catch (Exception e) {
-            // TODO: handle exception
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        
-        return null;
     }
     
     @PostMapping("/article")

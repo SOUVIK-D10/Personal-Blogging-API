@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Article API – Dev Test Client</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #0f172a;
+      color: #e5e7eb;
+      margin: 0;
+      padding: 24px;
+    }
+
+    h1 {
+      color: #38bdf8;
+      margin-bottom: 4px;
+    }
+
+    .note {
+      color: #9ca3af;
+      font-size: 14px;
+      margin-bottom: 24px;
+    }
+
+    .container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 16px;
+    }
+
+    .card {
+      background: #020617;
+      border: 1px solid #1f2937;
+      border-radius: 12px;
+      padding: 16px;
+    }
+
+    .card h3 {
+      margin-top: 0;
+      font-size: 16px;
+      color: #7dd3fc;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      margin-top: 8px;
+      color: #9ca3af;
+    }
+
+    input, textarea {
+      width: 100%;
+      margin-top: 4px;
+      padding: 8px;
+      border-radius: 8px;
+      border: 1px solid #1f2937;
+      background: #020617;
+      color: #e5e7eb;
+      font-size: 14px;
+    }
+
+    textarea { min-height: 80px; }
+
+    button {
+      margin-top: 12px;
+      padding: 8px 12px;
+      background: #38bdf8;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    button:hover { opacity: 0.9; }
+
+    pre {
+      margin-top: 12px;
+      background: #020617;
+      border: 1px solid #1f2937;
+      border-radius: 8px;
+      padding: 12px;
+      max-height: 250px;
+      overflow: auto;
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Article API – Dev Test Client</h1>
+<p class="note">This is a lightweight developer testing interface. Not intended for production UI.</p>
+
+<div class="container">
+
+  <div class="card">
+    <h3>Search Articles</h3>
+    <label>Keyword</label>
+    <input id="searchKeyword" placeholder="spring" />
+    <label>Filter</label>
+    <input id="searchFilter" placeholder="title / author" />
+    <button onclick="searchArticles()">Search</button>
+    <pre id="searchResult"></pre>
+  </div>
+
+  <div class="card">
+    <h3>Get Article by ID</h3>
+    <label>Article ID</label>
+    <input id="getId" type="number" />
+    <button onclick="getArticle()">Fetch</button>
+    <pre id="getResult"></pre>
+  </div>
+
+  <div class="card">
+    <h3>Create Article</h3>
+    <label>Request Body (JSON)</label>
+    <textarea id="createBody">[
+  {
+    "title": "Test Article",
+    "author": "Dev",
+    "content": "Sample content",
+    "tags": "test"
+  }
+]</textarea>
+    <button onclick="createArticle()">Create</button>
+    <pre id="createResult"></pre>
+  </div>
+
+  <div class="card">
+    <h3>Update Article</h3>
+    <label>Request Body (JSON)</label>
+    <textarea id="updateBody">{
+  "id": 1,
+  "title": "Updated Title",
+  "author": "Dev",
+  "content": "Updated content",
+  "tags": "update"
+}</textarea>
+    <button onclick="updateArticle()">Update</button>
+    <pre id="updateResult"></pre>
+  </div>
+
+  <div class="card">
+    <h3>Delete Article</h3>
+    <label>Article ID</label>
+    <input id="deleteId" type="number" />
+    <button onclick="deleteArticle()">Delete</button>
+    <pre id="deleteResult"></pre>
+  </div>
+
+</div>
+
+<script>
+  const BASE = '/article_api';
+
+  async function searchArticles() {
+    const k = document.getElementById('searchKeyword').value;
+    const f = document.getElementById('searchFilter').value;
+    const res = await fetch(`${BASE}/search?keyword=${k}&filter=${f}`);
+    document.getElementById('searchResult').textContent = await res.text();
+  }
+
+  async function getArticle() {
+    const id = document.getElementById('getId').value;
+    const res = await fetch(`${BASE}/article?id=${id}`);
+    document.getElementById('getResult').textContent = await res.text();
+  }
+
+  async function createArticle() {
+    const body = document.getElementById('createBody').value;
+    const res = await fetch(`${BASE}/article`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body
+    });
+    document.getElementById('createResult').textContent = await res.text();
+  }
+
+  async function updateArticle() {
+    const body = document.getElementById('updateBody').value;
+    const res = await fetch(`${BASE}/article`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body
+    });
+    document.getElementById('updateResult').textContent = await res.text();
+  }
+
+  async function deleteArticle() {
+    const id = document.getElementById('deleteId').value;
+    const res = await fetch(`${BASE}/article?id=${id}`, { method: 'DELETE' });
+    document.getElementById('deleteResult').textContent = await res.text();
+  }
+</script>
+
+</body>
+</html>

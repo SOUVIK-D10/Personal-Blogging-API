@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Article API Documentation</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --panel: #111827;
+      --card: #1f2933;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --accent: #38bdf8;
+      --success: #22c55e;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background: linear-gradient(120deg, #020617, #0f172a);
+      color: var(--text);
+    }
+
+    header {
+      padding: 24px 32px;
+      border-bottom: 1px solid #1f2937;
+      background: rgba(2,6,23,0.8);
+      backdrop-filter: blur(8px);
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 26px;
+      color: var(--accent);
+    }
+
+    header p {
+      margin: 6px 0 0;
+      color: var(--muted);
+    }
+
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 32px;
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 24px;
+    }
+
+    nav {
+      background: var(--panel);
+      border-radius: 14px;
+      padding: 16px;
+      position: sticky;
+      top: 24px;
+      height: fit-content;
+    }
+
+    nav h3 {
+      margin: 0 0 12px;
+      font-size: 14px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    nav button {
+      width: 100%;
+      background: transparent;
+      border: 1px solid #1f2937;
+      color: var(--text);
+      padding: 10px 12px;
+      border-radius: 10px;
+      cursor: pointer;
+      text-align: left;
+      margin-bottom: 10px;
+      transition: 0.2s ease;
+    }
+
+    nav button:hover {
+      background: #020617;
+      border-color: var(--accent);
+    }
+
+    section {
+      background: var(--card);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 24px;
+      display: none;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    }
+
+    section.active {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .endpoint {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    .get { background: rgba(56,189,248,0.15); color: var(--accent); }
+    .post { background: rgba(34,197,94,0.15); color: var(--success); }
+    .put { background: rgba(245,158,11,0.15); color: var(--warning); }
+    .delete { background: rgba(239,68,68,0.15); color: var(--danger); }
+
+    h2 { margin-top: 0; }
+
+    pre {
+      background: #020617;
+      padding: 16px;
+      border-radius: 12px;
+      overflow-x: auto;
+      font-size: 13px;
+    }
+
+    .label {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 12px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 24px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Article API</h1>
+  <p>Interactive REST API Documentation</p>
+</header>
+
+<main>
+  <nav>
+    <h3>Endpoints</h3>
+    <button onclick="show('overview')">Overview</button>
+    <button onclick="show('search')">Search Articles</button>
+    <button onclick="show('get')">Get Article(s)</button>
+    <button onclick="show('create')">Create Articles</button>
+    <button onclick="show('update')">Update Article</button>
+    <button onclick="show('delete')">Delete Article</button>
+  </nav>
+
+  <div>
+    <section id="overview" class="active">
+      <h2>Overview</h2>
+      <p>The <b>Article API</b> is a RESTful backend built using <b>Spring Boot</b> that allows managing articles with search, filter, and CRUD operations.</p>
+      <p class="label">Base URL</p>
+      <pre>/article_api</pre>
+    </section>
+
+    <section id="search">
+      <span class="endpoint get">GET /search</span>
+      <h2>Search Articles</h2>
+      <p>Search articles by keyword, title, author, or date range.</p>
+      <pre>GET /article_api/search?keyword=spring&filter=title</pre>
+      <div class="label">Optional Body (Date Filter)</div>
+      <pre>{
+  "startDate": "2024-01-01",
+  "endDate": "2024-01-31"
+}</pre>
+    </section>
+
+    <section id="get">
+      <span class="endpoint get">GET /article</span>
+      <h2>Get Articles</h2>
+      <p>Fetch all articles or a single article by ID.</p>
+      <pre>GET /article_api/article
+GET /article_api/article?id=5</pre>
+    </section>
+
+    <section id="create">
+      <span class="endpoint post">POST /article</span>
+      <h2>Create Articles (Bulk)</h2>
+      <pre>[
+  {
+    "title": "Java Basics",
+    "author": "Alice",
+    "content": "Intro to Java",
+    "tags": "java,backend"
+  }
+]</pre>
+    </section>
+
+    <section id="update">
+      <span class="endpoint put">PUT /article</span>
+      <h2>Update Article</h2>
+      <pre>{
+  "id": 3,
+  "title": "Updated Title",
+  "author": "Bob",
+  "content": "Updated content",
+  "tags": "java,update"
+}</pre>
+    </section>
+
+    <section id="delete">
+      <span class="endpoint delete">DELETE /article</span>
+      <h2>Delete Article</h2>
+      <pre>DELETE /article_api/article?id=3</pre>
+    </section>
+  </div>
+</main>
+
+<footer>
+  Article API Documentation • Spring Boot REST API
+</footer>
+
+<script>
+  function show(id) {
+    document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+  }
+</script>
+
+</body>
+</html>
